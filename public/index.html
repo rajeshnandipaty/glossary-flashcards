@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossary → Flashcards</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Glossary <span class="arrow">→</span> Flashcards</h1>
+    <p class="tagline">Drop in pages. Get a deck.</p>
+  </header>
+
+  <main>
+    <section class="card upload-section">
+      <label for="file-input" class="drop-zone" id="drop-zone">
+        <div class="drop-icon">📚</div>
+        <div class="drop-text"><strong>Choose images</strong> or drag them here</div>
+        <div class="drop-hint">JPG, PNG, or WebP — glossary pages, or pages with bold vocab</div>
+        <input type="file" id="file-input" accept="image/jpeg,image/png,image/webp" multiple hidden>
+      </label>
+
+      <div class="thumbnails" id="thumbnails"></div>
+
+      <button id="extract-btn" class="primary-btn" disabled>Extract terms</button>
+    </section>
+
+    <div id="status"></div>
+
+    <section class="card results-section" id="results-section" hidden>
+      <div class="results-header">
+        <h2>Extracted terms</h2>
+        <span class="count" id="card-count">0 cards</span>
+      </div>
+
+      <p class="hint">Edit any cell before exporting. Click ✕ to remove a row.</p>
+
+      <div class="table-wrap">
+        <table id="cards-table">
+          <thead>
+            <tr>
+              <th>Term</th>
+              <th>Definition</th>
+              <th aria-label="Remove"></th>
+            </tr>
+          </thead>
+          <tbody id="cards-body"></tbody>
+        </table>
+      </div>
+
+      <div class="deck-row">
+        <label for="deck-name">Deck name</label>
+        <input type="text" id="deck-name" value="Imported Vocabulary" placeholder="Imported Vocabulary">
+      </div>
+
+      <button id="download-btn" class="primary-btn">Download CSV for Anki</button>
+    </section>
+
+    <details class="howto">
+      <summary>How to import into Anki</summary>
+      <ol>
+        <li>Open Anki on your computer.</li>
+        <li>Click <strong>File → Import</strong>.</li>
+        <li>Select the downloaded <code>flashcards.csv</code>.</li>
+        <li>The file already specifies the deck, separator, and note type — just confirm and click <strong>Import</strong>.</li>
+        <li>A new deck with the name you chose will appear in your collection.</li>
+      </ol>
+    </details>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

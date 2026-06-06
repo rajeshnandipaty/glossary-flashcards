@@ -1,0 +1,14 @@
+{
+  "name": "glossary-flashcards",
+  "version": "1.0.0",
+  "description": "Turn photos of book glossaries (and pages with bold vocab) into Anki-importable CSV files using Claude vision.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.30.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
