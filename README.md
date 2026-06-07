@@ -67,7 +67,7 @@ Open `http://localhost:3000` in your browser. `Ctrl+C` in the terminal stops it.
 The downloaded CSV includes Anki header lines, so import is one click:
 
 1. `File → Import` in Anki
-2. Pick `cards.csv`
+2. Pick `flashcards.csv`
 3. Click **Import**
 
 A new deck appears with the name you typed in the app.
