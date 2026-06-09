@@ -12,3 +12,11 @@
     "express": "^4.19.2"
   }
 }
+{
+	"name": "glossary-flashcards",
+	"version": "1.0.0",
+	"description": "Turn photos of book glossaries...",
+	"license": "MIT",
+	"main": "server.js",
+	...
+}
