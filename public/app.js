@@ -82,14 +82,14 @@ function renderThumbnails() {
 }
 
 // --- Extraction ---
-extractBtn.addEventListener('click', async () => {
-	if (uploadedImages.length === 0) return;
 
-	if (!apiKeyInput.value.trim()) {
-		setStatus('error', 'Paste your Anthropic API key above first.');
-		return;
-	}
-}
+extractBtn.addEventListener('click', async () => {
+  if (uploadedImages.length === 0) return;
+
+  if (!apiKeyInput.value.trim()) {
+    setStatus('error', 'Paste your Anthropic API key above first.');
+    return;
+  }
 
   extractBtn.disabled = true;
   setStatus(
