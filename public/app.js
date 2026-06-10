@@ -115,8 +115,15 @@ extractBtn.addEventListener('click', async () => {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('Invalid API key — double-check it and try again.');
+      }
+      if (response.status === 429) {
+        throw new Error('Rate limited by Anthropic — wait a moment and retry.');
+      }
       const err = await response.json().catch(() => ({}));
-      throw new Error(err.error || `Server error (${response.status})`);
+      const detail = typeof err.error === 'string' ? err.error : '';
+      throw new Error(detail || `Something went wrong (error ${response.status}).`);
     }
 
     const { cards } = await response.json();
