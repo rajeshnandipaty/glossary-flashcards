@@ -1,3 +1,14 @@
+---
+title: Glossary Flashcards
+emoji: 📚
+colorFrom: indigo
+colorTo: purple
+sdk: docker
+app_port: 7860
+pinned: false
+license: mit
+---
+
 # Glossary → Flashcards
 
 > Turn photos of book glossaries (or any page with bold vocab) into Anki-importable flashcards using Claude vision.
