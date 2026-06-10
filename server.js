@@ -14,15 +14,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json({ limit: '25mb' }));
 app.use(express.static('public'));
 
-if (!process.env.ANTHROPIC_API_KEY) {
-  console.error('\n❌ ANTHROPIC_API_KEY is missing.');
-  console.error('   Copy .env.example to .env and paste your key into it.\n');
-  process.exit(1);
-}
-
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
 
 // Detect the real image format from the first few bytes ("magic numbers").
 // Browsers sometimes mislabel file.type (especially on Linux), and Claude
@@ -65,6 +56,12 @@ If no terms are being defined, return: []`;
 
 app.post('/api/extract', async (req, res) => {
   try {
+    const apiKey = req.headers['x-api-key'];
+    if (!apiKey) {
+    	return res.status(401).json({ error: 'No API key provided.' });
+    }
+    const anthropic = new Anthropic({ apiKey });
+
     const { images } = req.body;
 
     if (!Array.isArray(images) || images.length === 0) {

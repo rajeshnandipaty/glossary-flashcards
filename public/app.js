@@ -10,6 +10,7 @@ const cardsBody = document.getElementById('cards-body');
 const cardCount = document.getElementById('card-count');
 const downloadBtn = document.getElementById('download-btn');
 const status = document.getElementById('status');
+const apiKeyInput = document.getElementById('api-key-input');
 
 let uploadedImages = []; // { dataUrl, base64, mediaType }
 
@@ -81,6 +82,10 @@ function renderThumbnails() {
 }
 
 // --- Extraction ---
+if (!apiKeyInput.value.trim()) {
+	status.textContent = 'Paste your Anthropic API key above first.';
+	return;
+}
 
 extractBtn.addEventListener('click', async () => {
   if (uploadedImages.length === 0) return;
@@ -101,7 +106,10 @@ extractBtn.addEventListener('click', async () => {
 
     const response = await fetch('/api/extract', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-api-key': apiKeyInput.value.trim(), 
+      },
       body: JSON.stringify(payload),
     });
 
