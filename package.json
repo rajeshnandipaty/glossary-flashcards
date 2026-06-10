@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Turn photos of book glossaries (and pages with bold vocab) into Anki-importable CSV files using Claude vision.",
   "main": "server.js",
+  "license": "MIT",
   "scripts": {
     "start": "node server.js"
   },
@@ -11,12 +12,4 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2"
   }
-}
-{
-	"name": "glossary-flashcards",
-	"version": "1.0.0",
-	"description": "Turn photos of book glossaries...",
-	"license": "MIT",
-	"main": "server.js",
-	...
 }
