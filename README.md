@@ -11,6 +11,8 @@ license: mit
 
 # Glossary → Flashcards
 
+**[Launch Live Demo (bring your own Anthropic API key)](https://huggingface.co/spaces/rajeshnandipaty/glossary-flashcards)**
+
 > Turn photos of book glossaries (or any page with bold vocab) into Anki-importable flashcards using Claude vision.
 
 ![App with an uploaded glossary page ready to extract](docs/screenshots/01-app.png)
