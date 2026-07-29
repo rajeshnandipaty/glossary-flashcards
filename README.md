@@ -9,7 +9,7 @@ pinned: false
 license: mit
 ---
 
-# [Glossary → Flashcards](https://rajeshnandipaty.com/notes/glossary-flashcards)
+# [Glossary → Flashcards](https://rajeshnandipaty.com/projects/glossary-flashcards)
 
 **[Launch Live Demo (bring your own Anthropic API key)](https://huggingface.co/spaces/rajeshnandipaty/glossary-flashcards)**
 
