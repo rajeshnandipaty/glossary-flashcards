@@ -11,52 +11,52 @@ license: mit
 
 # [Glossary to Flashcards](https://rajeshnandipaty.com/projects/glossary-flashcards)
 
-**[Launch Live Demo (bring your own Anthropic API key)](https://huggingface.co/spaces/rajeshnandipaty/glossary-flashcards)**
+**[Launch Live Demo](https://huggingface.co/spaces/rajeshnandipaty/glossary-flashcards)**
 
-> Turn photos of book glossaries (or any page with bold vocabulary) into flashcards ready for Anki using Claude vision.
+> Turn photos of book glossaries, or any page with bold vocabulary, into flashcards ready for Anki using Claude's vision capabilities.
 
 ![App with an uploaded glossary page ready to extract](docs/screenshots/01-app.png)
 
-This is a remastered version of a small web app I built as my first real coding project. Photos of glossary pages can still be uploaded but now the app sends them to Claude's vision API. It returns a CSV file that imports cards cleanly into a deck.
+This project is a remastered version of a small web app I built as my first real coding project. Users can upload photos of glossary pages, and the app processes them using Claude's vision API. The extracted terms and definitions are returned as a CSV file that can be imported directly into an Anki deck.
 
-## Live demo
+## Live Demo
 
-A hosted version runs on [Hugging Face Spaces](https://huggingface.co/spaces/rajeshnandipaty/glossary-flashcards). It uses a model where you supply your own key. You paste your own Anthropic API key into the app. It is sent with each extraction request and used to call Claude. It is not stored or logged by the app. Every visitor pays only for their own usage so there is no shared bill to run up. This is what made a public demo practical in the first place.
+A hosted version of the app is available on [Hugging Face Spaces](https://huggingface.co/spaces/rajeshnandipaty/glossary-flashcards). The demo uses a bring-your-own-key model. You enter your own Anthropic API key directly into the app. The key is sent with each extraction request to authenticate with Claude. The app does not store or log your key. Each visitor is responsible for their own API usage and associated costs. This avoids a shared API bill and makes it practical to offer the demo publicly.
 
-## Capabilities
+## How It Works
 
-Photos go in. The web app sends them to Claude with a prompt asking for term and definition pairs in JSON. The response is parsed into an editable table. You can fix or delete rows before exporting. The CSV download includes header lines specific to Anki that tell it the separator and the note type. Importing then becomes a single click instead of a multistep configuration.
+Upload a photo of a glossary page, and the web page sends it to Claude with a prompt requesting term and definition pairs in JSON format. The response is parsed into an editable table, where you can review, edit or delete entries before exporting. The CSV download includes Anki-specific header lines that define the field separator and note type. This allows the file to be imported directly into Anki without additional configuration.
 
-![Extracted terms ready to export](docs/screenshots/02-extracted.png)
+![Extracted terms ready for export](docs/screenshots/02-extracted.png)
 
-After importing the CSV the cards land in an Anki deck with the term on the front and the definition on the back:
+After importing the CSV, the cards are added to an Anki deck with the term on the front and the definition on the back:
 
-![An imported card under review in Anki](docs/screenshots/03-anki.png)
+![Imported Anki card under review in Anki](docs/screenshots/03-anki.png)
 
-## Motivation
+## Background
 
-A good way to refresh my foundations is to revisit old projects I had running locally. This is one of them. The friction of typing flashcards by hand is still a real problem and learners want to move faster. Extracting bold terms from ebook and research paper screenshots remains the highest value target for independent learners who want automation.
+One way I refresh my foundations is by revisiting older projects that I still have running locally. This is one of them. Manually creating flashcards remains tedious, and learners benefit from a faster way to turn useful vocabulary into study material. Extracting bold terms from ebook and research paper screenshots is particularly valuable for independent learners who want to automate this process.
 
-Tesseract is free and runs locally and handles clean printed text well. Today a lot of useful vocabulary hardly appears in dedicated glossaries. Promising words are instead introduced inline in bold. Consider a sentence such as "Classification is a problem of assigning a label to an unlabeled example." Only one of the three bold words is actually being defined. Working out which bold term is being defined rather than cross referenced is where a vision capable LLM becomes preferable to an OCR and regex pipeline.
+Tesseract is free, runs locally, and handles clean printed text well. However, useful vocabulary often appears outside dedicated glossaries. Terms are frequently introduced inline in bold. Consider a sentence such as "Classification is a problem of assigning a label to an unlabeled example." Only one of the three bold terms is actually being defined. Determining which term is being defined, rather than merely identifying or cross-referencing it, is where a vision-capable LLM has an advantage over a traditional OCR and regex pipeline.
 
-## Lessons learned
+## Key Takeaways
 
-Most of the work was not in the JavaScript. It was in three places:
+Most of the work was not in the JavaScript. It was concentrated in three places:
 
-- **The prompt.** The single most consequential file in the project is `server.js` and the most consequential part of it is the extraction prompt. Telling the model to skip bold words that are merely referenced rather than defined made a much bigger difference than any code I wrote.
+- **The Prompt.** The single most consequential file in the project is `server.js`, and the most important part of that file is the extraction prompt. Telling the model to skip bold words that are referenced rather than defined made a much bigger difference than any code change.
 
-- **Trusting the bytes rather than the labels.** My browser told the server that an uploaded WebP file was `image/jpeg`. Claude's API correctly rejected the mismatch. The fix was to detect the actual format from the file's first few bytes (its "magic numbers") and to ignore what the upload claimed. Real world data lies and the bytes do not.
+- **Trust the bytes, not the labels.** My browser reported an uploaded WebP file as `image/jpeg`, which caused Claude's API to reject it. The fix was to detect the actual file format from its first few bytes, known as "magic numbers," and ignore the reported MIME type. Real-world data can be unreliable. The bytes are the source of truth.
 
-- **Domain quirks matter.** A plain CSV does not tell Anki anything about which deck to create or which note type to use or how to map columns to fields. My first import dumped every term's definition into the front of the card with no back at all. The fix was learning that Anki supports `#header:value` lines at the top of a CSV file. Examples are `#separator:Comma` and `#deck:NAME` and `#columns:Front,Back` among a few others. Five lines of text made the import work correctly.
+- **Domain quirks matter.** A plain CSV does not tell Anki which deck to use, which note type to create, or how to map columns to fields. My first import put every definition on the front of the card and left the back empty. The fix was learning that Anki supports `#header:value` lines at the top of a CSV file, such as `#separator:Comma`, `#deck:NAME`, and `#columns:Front,Back`. A few lines of metadata were enough to make the import work correctly.
 
-## Running it locally
+## Run Locally
 
-You can run your own copy instead of using the hosted Space. It is a standard Node app.
+You can run your own copy instead of using the hosted Space. The app is a standard Node.js application.
 
 ### Requirements
 
-- Node.js 18+ (use [nvm](https://github.com/nvm-sh/nvm) if you do not have it)
-- An Anthropic API key from [console.anthropic.com](https://console.anthropic.com). About 5 dollars of credit is plenty.
+- Node.js 18 or later. If Node.js is not installed, [nvm](https://github.com/nvm-sh/nvm) is a convenient way to install and manage it.
+- An Anthropic API key from [console.anthropic.com](https://console.anthropic.com). A small amount of API credit is sufficient for testing the app.
 
 ### Install
 
@@ -72,41 +72,41 @@ npm install
 npm start
 ```
 
-Open `http://localhost:3000`. Paste your Anthropic API key into the field at the top of the page and start uploading. The key is entered in the app itself so there is no `.env` file to set up. `Ctrl+C` in the terminal stops the server.
+Open `http://localhost:3000` in your browser. Enter your Anthropic API key in the field at the top of the page, then start uploading images. The API key is entered directly in the app, so no `.env` file or additional environment configuration is required. Press `Ctrl+C` in the terminal to stop the server.
 
 ## Importing into Anki
 
-The downloaded CSV includes Anki header lines so import is one click:
+The downloaded CSV includes the Anki-specific header lines, so importing the flashcards takes just a few steps:
 
-1. `File → Import` in Anki
-2. Pick `flashcards.csv`
-3. Click **Import**
+1. Select `File → Import` in Anki.
+2. Select `flashcards.csv`.
+3. Click **Import**.
 
-A new deck appears with the name you typed in the app.
+Anki creates a new deck using the name you entered in the app.
 
-## Project layout
+## Project Structure
 
 ```
 glossary-flashcards/
-├── server.js              Express backend. Receives the key with each request, talks to Claude, sniffs image types.
-├── Dockerfile             Container build used by Hugging Face Spaces.
+├── server.js              Express backend. Handles requests, communicates with Claude, and detects image formats.
+├── Dockerfile             Container configuration for Hugging Face Spaces.
 ├── public/
-│   ├── index.html         UI shell
-│   ├── style.css          Styling
-│   └── app.js             Upload handling, table editing, CSV export
-├── package.json
-├── .gitignore             Keeps .env and node_modules out of git
-└── docs/screenshots/      README screenshots
+│   ├── index.html         Application interface.
+│   ├── style.css          Application styling.
+│   └── app.js             Upload handling, table editing, CSV export.
+├── package.json           Node.js dependencies and scripts.
+├── .gitignore             Excludes .env and node_modules from version control.
+└── docs/screenshots/      Screenshots used in the README.
 ```
 
 ## Cost
 
-Roughly half a penny per page sent to Claude so about $0.50 for 100 pages. This is billed to whichever key is entered. You only ever pay for your own extractions.
+Each page costs roughly half a cent to process with Claude, or about $0.50 for 100 pages. Charges are billed to the Anthropic account associated with the API key entered in the app. You only pay for your own extractions.
 
 ## Troubleshooting
 
-**"Invalid API key"** means the key was mistyped or has a stray space or was revoked. Get a fresh one from [console.anthropic.com](https://console.anthropic.com) and paste it again. Keys start with `sk-ant-api03-`.
+**"Invalid API key"** usually means the key was entered incorrectly, contains extra whitespace, or has been revoked. Create a new key at [console.anthropic.com](https://console.anthropic.com) and try again. Anthropic API keys typically begin with `sk-ant-api03-`.
 
-**"No terms were found"** means you should try a sharper photo with better lighting. Most failures here are image quality.
+**"No terms were found"** usually indicates an image quality issue. Try a sharper photo with better lighting and make sure the text is clearly visible.
 
-**Server will not start** usually means something else is using port 3000. Run `PORT=3001 npm start` to use a different port.
+**The server will not start** usually means port 3000 is already in use. Start the app on a different port with `PORT=3001 npm start`.
